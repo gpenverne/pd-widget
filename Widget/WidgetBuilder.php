@@ -3,10 +3,10 @@
 /**
  * This file is part of the pd-admin pd-widget package.
  *
- * @package     pd-widget
  * @license     LICENSE
  * @author      Ramazan APAYDIN <apaydin541@gmail.com>
- * @link        https://github.com/appaydin/pd-widget
+ *
+ * @see        https://github.com/appaydin/pd-widget
  */
 
 namespace Pd\WidgetBundle\Widget;
@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class WidgetBuilder implements WidgetBuilderInterface
 {
     /**
-     * @var EntityManagerInterface
+     * @var EntityManagerInterface|null
      */
     private $entityManager;
 
@@ -42,7 +42,7 @@ class WidgetBuilder implements WidgetBuilderInterface
     /**
      * WidgetBuilder constructor.
      */
-    public function __construct(EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage)
+    public function __construct(?EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage)
     {
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
@@ -125,6 +125,9 @@ class WidgetBuilder implements WidgetBuilderInterface
      */
     private function loadUserConfig()
     {
+        if (null == $this->entityManager) {
+            return;
+        }
         if (!$this->widgetConfig) {
             $this->widgetConfig = $this->entityManager
                 ->getRepository('PdWidgetBundle:WidgetUser')
